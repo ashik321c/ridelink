@@ -52,12 +52,15 @@ io.on('connection', (socket) => {
 // Mount API Routes
 app.use('/api', require('./routes/api'));
 
+// Global Error Handler Middleware
+app.use(require('./middlewares/errorMiddleware'));
+
 // Database connection & start server
 const PORT = process.env.PORT || 5001;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/ridelink';
 
 mongoose
-  .connect(MONGO_URI)
+  .connect(MONGO_URI, { serverSelectionTimeoutMS: 2000 })
   .then(() => {
     console.log('MongoDB connected successfully');
     server.listen(PORT, () => {
